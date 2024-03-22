@@ -14,15 +14,13 @@
 
   <script>
     let { reactive, effect } = VueReactivity;
-    let state = reactive({ name: 'cj', age: 18, other: 'xxx' })
+    let state = reactive({ name: 'cj', age: 18, arr: [1, 2, 3] })
     effect(() => {
-      app.innerHTML = state.name + '今年' + state.age + '岁了';
-    })
-    effect(() => {
-      app.innerHTML = state.name + '今年' + state.age + '岁了';
+      console.log('render');
+      app.innerHTML = state.arr;  //会取长度
     })
     setTimeout(() => {
-      state.other = 'xxxxx';
+      state.arr[100] = 1; //更改namse属性需要重新执行
     }, 1000)
   </script>
 </body>
