@@ -3,6 +3,8 @@
 // 是不是深度的
 
 import { extend, isObject } from '@vue/shared';
+import { track } from './effect';
+import { TrackOpTypes } from './operators';
 import { readonly, reactive } from './reactive';
 
 const get = createGetter();
@@ -44,6 +46,9 @@ function createGetter(isReadonly = false, shallow = false) {  //拦截获取
 
     if (!isReadonly) {
       // 收集依赖，等会数据变化后更新对应的视图
+      // console.log('执行effect时会取值，收集effect', target, key);
+      // 当我们对对像（target）做什么操作（取值TrackOpTypes.GET）需要把属性（key）收集起来
+      track(target, TrackOpTypes.GET, key,);
     }
     if (shallow) {
       return res;
