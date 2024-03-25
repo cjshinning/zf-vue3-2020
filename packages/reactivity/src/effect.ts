@@ -27,8 +27,6 @@ function createReactiveEffeft(fn, options) {
         activeEffect = effectStack[effectStack.length - 1];
       }
     }
-
-
   }
   effect.id = uid++;  // 制作一个effect表示，用于区分effect
   effect.isEffect = true; //用于标识这个是响应式effect
@@ -59,6 +57,7 @@ export function track(target, type, key) {  //可以拿到当前的effect
   // console.log(targetMap);
 }
 
+// 找属性对应的effect 让其执行 （数组、对象）
 export function trigger(target, type, key?, newValue?, oldValue?) {
   // console.log(target, type, key, value, oldValue);
   // 如果这个属性没有被收集过，那就不需要做任何操作

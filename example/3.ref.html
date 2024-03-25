@@ -13,14 +13,14 @@
   <script src="../node_modules/@vue/reactivity/dist/reactivity.global.js"></script>
 
   <script>
-    let { reactive, effect } = VueReactivity;
-    let state = reactive({ name: 'cj', age: 18, arr: [1, 2, 3] })
-    effect(() => {
-      console.log('render');
-      app.innerHTML = state.arr;  //会取长度
+    let { reactive, effect, ref, shallowRef } = VueReactivity;
+    let name = ref('cj'); //将普通类型转化成一个对象，这个对象中有value熟悉指向原理的值
+    console.log(name);
+    effect(() => {  //默认会执行 -> 会依赖收集 收集effect
+      app.innerHTML = name.value; //track
     })
     setTimeout(() => {
-      state.arr[100] = 1; //更改namse属性需要重新执行
+      // name.value = 'jenny'; //trigger
     }, 1000)
 
     // 1.effect中的所有属性都会收集effect track
