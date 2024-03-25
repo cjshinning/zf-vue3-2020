@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <div id="app"></div>
+  <script src="../node_modules/@vue/reactivity/dist/reactivity.global.js"></script>
+
+  <script>
+    let { reactive, effect, ref, toRef, toRefs } = VueReactivity;
+    let proxy = reactive({ name: 'cj', age: 18 }); //将普通类型转化成一个对象，这个对象中有value熟悉指向原理的值
+
+    // let r1 = toRef(proxy, 'name');
+    // let r2 = toRef(proxy, 'age');
+    // let r1 = toRefs(proxy);
+    // let { name, age } = proxy;  //这种解构将失去响应式
+    let { name, age } = toRefs(proxy);  //保留响应式
+    // console.log(r1);
+    // r.value = 'xxx';
+    // console.log(r);
+    // let { name } = proxy;
+    effect(() => {
+      app.innerHTML = name.value + age.value;
+    })
+    setTimeout(() => {
+      proxy.name = 'jenny';
+    }, 1000)
+
+    // reactive 就是响应式api
+    // ref 普通值就只能用ref
+    // 想结构reactive -> toRefs 解构其中某一个 toRef
+
+  </script>
+</body>
+
+</html>
