@@ -95,7 +95,13 @@ export function trigger(target, type, key?, newValue?, oldValue?) {
     }
   }
   // console.log(effects);
-  effects.forEach((effect: any) => effect())
+  effects.forEach((effect: any) => {
+    if (effect.options.scheduler) {
+      effect.options.scheduler();
+    } else {
+      effect();
+    }
+  })
 }
 
 // weakMap key => { name: 'cj', age: 18 } value => Map {name => set}
