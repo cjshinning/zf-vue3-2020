@@ -9,3 +9,5 @@ export const isIntegerKey = (key) => parseInt(key) + '' === key;
 let hasOwnProperty = Object.prototype.hasOwnProperty
 export const hasOwn = (target, key) => hasOwnProperty.call(target, key);
 export const hasChanged = (oldValue, value) => oldValue !== value;
+
+export * from './shapeFlag';
