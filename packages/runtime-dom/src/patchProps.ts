@@ -14,7 +14,7 @@ export const patchProps = (el, key, prevValue, nextValue) => {
       break;
     default:
       if (/^on[^a-z]/.test(key)) {
-        patchClass(el, key, nextValue);
+        patchEvent(el, key, nextValue);
       } else {
         patchAttr(el, key, nextValue);
       }

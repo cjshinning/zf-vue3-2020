@@ -1,3 +1,3 @@
-export default {
-  a: 2
-}
+export {
+  createRenderer
+} from './renderer';
