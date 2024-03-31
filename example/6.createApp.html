@@ -16,11 +16,19 @@
     let { createApp } = VueRuntimeDOM;
     let App = {
       setup(props, context) { //instance 里面包含的内容 会提取一些传递给context
-        console.log('ok', props, context);
+        // console.log('ok', props, context);
+        // return function () {
+        //   console.log('setup render');
+        // }
+        return {
+          a: 1,
+          b: 2
+        }
       },
       render(proxy) { //effect函数，数据变化重新渲染
         // proxy 好处就是不用通过instance.props来获取，直接通过proxy.xxx获取
-        console.log(proxy.age, proxy.b, proxy.c);
+        // console.log(proxy.age, proxy.b, proxy.c);
+        console.log('component render');
       }
     }
     let app = createApp(App, { name: 'jenny', age: 18 })

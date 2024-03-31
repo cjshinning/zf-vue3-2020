@@ -3,8 +3,9 @@ import { createAppAPI } from './apiCreateApp'
 import { createComponentInstance, setupComponent } from './component';
 
 export function createRenderer(rendererOptions) {  //告诉core怎么渲染
-  const setupRenderEffect = () => {
-
+  const setupRenderEffect = (instance) => {
+    // 需要创建一个effect 在effect中调用 render方法，这样render方法拿到这个effect，属性更新时effect会重新执行
+    instance.render();
   }
   const mountComponent = (initialVNode, container) => {
     // 组件渲染流程 最核心的就是调用 setup 拿到返回值，获取render函数返回的结果来进行渲染
@@ -13,7 +14,7 @@ export function createRenderer(rendererOptions) {  //告诉core怎么渲染
     // 2.将需要的数据解析到实例上
     setupComponent(instance); //启动组件
     // 3.创建一个effect，让render函数执行
-    setupRenderEffect();
+    setupRenderEffect(instance);
   }
   const processComponent = (n1, n2, container) => {
     if (n1 == null) { //组件没有上一次的虚拟节点
