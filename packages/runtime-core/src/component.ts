@@ -71,7 +71,7 @@ function finishComponentSetup(instance) {
     }
     instance.render = Component.render;
   }
-  console.log(instance, instance.render.toString());
+  // console.log(instance, instance.render.toString());
   // 对vue2.0 API 做了兼容处理
   // applyOptions
 }

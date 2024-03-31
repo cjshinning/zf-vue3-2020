@@ -1,11 +1,25 @@
+import { effect } from '@vue/reactivity';
 import { ShapeFlags } from '@vue/shared';
 import { createAppAPI } from './apiCreateApp'
 import { createComponentInstance, setupComponent } from './component';
 
 export function createRenderer(rendererOptions) {  //告诉core怎么渲染
-  const setupRenderEffect = (instance) => {
+  const setupRenderEffect = (instance, container) => {
     // 需要创建一个effect 在effect中调用 render方法，这样render方法拿到这个effect，属性更新时effect会重新执行
-    instance.render();
+    instance.update = effect(function componentEffect() {  //每个组件都有一个effect，vue3是组件级更新，数据变化会重新执行对应的effect
+      if (!instance.isMounted) {
+        // 初次渲染
+        let proxyToUse = instance.proxy;
+        // $vnode _vnode(vue2)
+        // vnode subTree(vue3)
+        let subTree = instance.subTree = instance.render.call(proxyToUse, proxyToUse);
+        // console.log(subTree);
+        patch(null, subTree, container);
+        instance.isMounted = true;
+      } else {
+        // 更新逻辑
+      }
+    })
   }
   const mountComponent = (initialVNode, container) => {
     // 组件渲染流程 最核心的就是调用 setup 拿到返回值，获取render函数返回的结果来进行渲染
@@ -14,7 +28,7 @@ export function createRenderer(rendererOptions) {  //告诉core怎么渲染
     // 2.将需要的数据解析到实例上
     setupComponent(instance); //启动组件
     // 3.创建一个effect，让render函数执行
-    setupRenderEffect(instance);
+    setupRenderEffect(instance, container);
   }
   const processComponent = (n1, n2, container) => {
     if (n1 == null) { //组件没有上一次的虚拟节点
@@ -27,7 +41,8 @@ export function createRenderer(rendererOptions) {  //告诉core怎么渲染
     // 针对不同类型做初始化操作
     const { shapeFlag } = n2;
     if (shapeFlag & ShapeFlags.ELEMENT) {
-      console.log('元素');
+      // console.log('元素');
+      console.log(n1, n2, container);
     } else if (shapeFlag & ShapeFlags.STATEFUL_COMPONENT) {
       // console.log('组件');
       processComponent(n1, n2, container);
