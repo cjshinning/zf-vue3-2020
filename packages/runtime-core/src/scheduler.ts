@@ -1,7 +1,6 @@
 
 let queue = [];
 export function queueJob(job) {
-  debugger
   if (!queue.includes(job)) {
     queue.push(job);
     queueFlush();

@@ -19,10 +19,11 @@
         // console.log('ok', props, context);
         let state = reactive({ name: 'cj' })
         let fn = function () {
-          state.name = 'jenny';
-          state.name = 'cj';
-          state.name = 'jenny';
-          state.name = 'cj';
+          console.log(state.name);
+          state.name = 'jenny1';
+          state.name = 'cj2';
+          state.name = 'jenny3';
+          state.name = 'cj4';
         }
         return (proxy) => {
           // h('div',{a:1});
@@ -34,43 +35,9 @@
           return h('div', { onClick: fn }, state.name);
         }
       },
-      // render(proxy) { //effect函数，数据变化重新渲染
-      //   // h('div', {});
-      //   // h('div', 'hello world');
-      //   // h('div', {}, 'hello world');
-      //   // h('div', {}, [h('p', {}), h('span')])
-      //   // h('div', {}, p, span)
-      // }
     }
     let app = createApp(App, { name: 'jenny', age: 18 })
     app.mount('#app');
-    // let App = {
-    //   // props: {
-    //   //   name: String
-    //   // },
-    //   // setup(props, context) { //替换beforeCreate
-    //   //   console.log(props.name, context)
-    //   //   const state = reactive({ count: 1 });
-    //   //   const fn = () => {
-    //   //     state.count++;
-    //   //   }
-    //   //   // return {
-    //   //   //   state
-    //   //   // }
-    //   //   return () => {
-    //   //     return h('div', { style: { color: 'red' }, onClick: fn }, `hello world ${state.count} ${proxy.a}`);
-    //   //   }
-    //   // },
-    //   // data() {
-    //   //   return { a: 1 }
-    //   // },
-    //   render(proxy) {
-    //     console.log('render');
-    //     // return h('div', { style: { color: 'red' } }, `hello world ${proxy.state.count} ${proxy.a}`);
-    //   }
-    // }
-    // // 参数 1）组件以哪个做为入口 2）props
-    // createApp(App, { name: 'cj', age: 18 }).mount('#app');
   </script>
 </body>
 
