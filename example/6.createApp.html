@@ -13,10 +13,17 @@
   <script src="../node_modules/@vue/runtime-dom/dist/runtime-dom.global.js"></script>
 
   <script>
-    let { createApp, h } = VueRuntimeDOM;
+    let { createApp, h, reactive } = VueRuntimeDOM;
     let App = {
       setup(props, context) { //instance 里面包含的内容 会提取一些传递给context
         // console.log('ok', props, context);
+        let state = reactive({ name: 'cj' })
+        let fn = function () {
+          state.name = 'jenny';
+          state.name = 'cj';
+          state.name = 'jenny';
+          state.name = 'cj';
+        }
         return (proxy) => {
           // h('div',{a:1});
           // h('div',{},'hello world');
@@ -24,7 +31,7 @@
           // h('div',[h('span'),h('span')])
           // h('div',null,[h('span'),h('span')])
           // h('div',null,'a','b','c)'
-          return h('div', { style: { color: 'red' } }, 'hello world');
+          return h('div', { onClick: fn }, state.name);
         }
       },
       // render(proxy) { //effect函数，数据变化重新渲染

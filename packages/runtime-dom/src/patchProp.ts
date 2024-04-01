@@ -4,7 +4,7 @@ import { patchClass } from './modules/class';
 import { patchEvent } from './modules/events';
 import { patchStyle } from './modules/style';
 
-export const patchProps = (el, key, prevValue, nextValue) => {
+export const patchProp = (el, key, prevValue, nextValue) => {
   switch (key) {
     case 'class':
       patchClass(el, nextValue);  //比对属性

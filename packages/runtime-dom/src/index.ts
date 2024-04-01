@@ -4,13 +4,13 @@
 import { createRenderer } from '@vue/runtime-core';
 import { extend } from '@vue/shared';
 import { nodeOps } from './nodeOps';
-import { patchProps } from './patchProps';
+import { patchProp } from './patchProp';
 
 // 节点操作就是增删改查
 // 属性操作 添加 删除 更新 样式、类、事件、其他属性
 
 // 渲染时用到的所有方法
-const rendererOptions = extend({ patchProps }, nodeOps);
+const rendererOptions = extend({ patchProp }, nodeOps);
 
 // vue中runtime-core中提供了核心的方法，用来处理渲染的，它会使用runtime-dom中的api进行渲染
 export function createApp(rootComponent, rootProps = null) {
