@@ -158,12 +158,15 @@ export function createRenderer(rendererOptions) {  //告诉core怎么渲染
       let s2 = i;
 
       // vue3用的是新的做的映射表 vue2用的是老的做的映射表
-      const keyToNewIndexMap = new Map();
+      const keyToNewIndexMap = new Map(); //值：索引
       for (let i = s2; i <= e2; i++) {
         const childVnode = c2[i];
         keyToNewIndexMap.set(childVnode.key, i);
       }
       // console.log(keyToNewIndexMap);
+
+      const toBePatched = e2 - s2 + 1;
+      const newIndexToOldIndexMap = new Array(toBePatched).fill(0);
 
       // 去老的里面查找 看有没有复用的
       for (let i = s1; i <= e1; i++) {
@@ -172,7 +175,22 @@ export function createRenderer(rendererOptions) {  //告诉core怎么渲染
         if (newIndex === undefined) {  //老的不在新的里面
           unmount(oldVnode);
         } else {  //新老的比对，比较之后位置有差异
+          // 新的和旧的索引的关系
+          newIndexToOldIndexMap[newIndex - s2] = i + 1;
           patch(oldVnode, c2[newIndex], el);
+        }
+      }
+      for (let i = toBePatched - 1; i >= 0; i--) {
+        let currentIndex = i + s2;  //找到h的索引
+        let child = c2[currentIndex]; //找到h对应的节点
+        let anchor = currentIndex + 1 < c2.length ? c2[currentIndex + 1].el : null;  //第一次插入h后，h是一个虚拟节点，同时插入后，虚拟节点会拥有真实节点
+        if (newIndexToOldIndexMap[i] == 0) {  //如果自己是0，说明没有被patch过
+          patch(null, child, el, anchor);
+        } else {
+          // [1,2,3,4,5,6]
+          // [1,6,2,3,4,5] 最长递增子序列
+          // 这个操作 需要将节点全部的移动一次，希望可以尽可能的少移动 [5,3,4,0]
+          hostInsert(child.el, el, anchor); //操作当前的d 以d下一个座位参照物插入
         }
       }
 
