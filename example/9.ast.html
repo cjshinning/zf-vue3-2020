@@ -11,18 +11,19 @@
 <body>
   <div id="app"></div>
 
+  <!-- <div><p>hello</p>{{name}} hello</div> -->
   <!-- hello {{name}}<div></div> -->
   <script src="../node_modules/@vue/compiler-dom/dist/compiler-dom.global.js"></script>
-
   <script>
     // vue3 templat -> render函数 3个步骤：
     // 1.把html模板解析成抽象语法树（ast），描述语法本身
     // 2.转化ast树 加标记进行优化（transform）
     // 3.生成render函数（字符串拼接）
     let { baseCompile } = VueCompilerDOM;
-    let ast = baseCompile(`he
-    
-    llow`);
+    let ast = baseCompile(`
+    123123
+    <a href=""></a>
+    <b></b>`);
     console.log(ast);
   </script>
 </body>
