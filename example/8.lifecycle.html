@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <div id="app"></div>
+  <script src="../node_modules/@vue/runtime-dom/dist/runtime-dom.global.js"></script>
+
+  <script>
+    let { createApp, h, reactive, onMounted, onBeforeMount, onUpdated, onBeforeUpdate, getCurrentInstance } = VueRuntimeDOM;
+    // 依赖收集 instance -> 对应的钩子，让组件收集对应的生命周期（谁用谁手机）
+    let App = {
+      setup() {
+        const state = reactive({ name: 'cj', age: 18, flag: true });
+        const instance = getCurrentInstance();
+
+        setTimeout(() => {
+          state.flag = false
+        }, 1000)
+
+        onBeforeMount(() => {
+          console.log('onBeforeMount');
+        })
+        onMounted(() => {
+          console.log('onMounted');
+        })
+        onBeforeUpdate(() => {
+          console.log('onBeforeUpdate');
+        })
+        onUpdated(() => {
+          console.log('onUpdated');
+        })
+        // console.log(instance);
+        return () => {
+          return h('div', state.flag);
+        }
+      },
+    }
+    let app = createApp(App, { name: 'jenny', age: 18 })
+    app.mount('#app');
+
+  </script>
+</body>
+
+</html>

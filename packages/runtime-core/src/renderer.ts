@@ -2,6 +2,7 @@ import { effect } from '@vue/reactivity';
 import { ShapeFlags } from '@vue/shared';
 import { patchProp } from 'packages/runtime-dom/src/patchProp';
 import { createAppAPI } from './apiCreateApp'
+import { invokeArrayFns } from './apiLifecycle';
 import { createComponentInstance, setupComponent } from './component';
 import { queueJob } from './scheduler';
 import { normalizeVnode, Text } from './vnode';
@@ -24,6 +25,10 @@ export function createRenderer(rendererOptions) {  //告诉core怎么渲染
     // 需要创建一个effect 在effect中调用 render方法，这样render方法拿到这个effect，属性更新时effect会重新执行
     instance.update = effect(function componentEffect() {  //每个组件都有一个effect，vue3是组件级更新，数据变化会重新执行对应的effect
       if (!instance.isMounted) {
+        let { bm, m } = instance;
+        if (bm) {
+          invokeArrayFns(bm);
+        }
         // 初次渲染
         let proxyToUse = instance.proxy;
         // $vnode _vnode(vue2)
@@ -32,13 +37,23 @@ export function createRenderer(rendererOptions) {  //告诉core怎么渲染
         // console.log(subTree);
         patch(null, subTree, container);
         instance.isMounted = true;
+        if (m) {  //mounted要求必须在子组件完成后才会调用自己
+          invokeArrayFns(m);
+        }
       } else {
         // 更新逻辑
         // diff算法
+        let { bu, u } = instance;
+        if (bu) {  //mounted要求必须在子组件完成后才会调用自己
+          invokeArrayFns(bu);
+        }
         const prevTree = instance.subTree;
         let proxyToUse = instance.proxy;
         const nextTree = instance.render.call(proxyToUse, proxyToUse);
         patch(prevTree, nextTree, container);
+        if (u) {  //mounted要求必须在子组件完成后才会调用自己
+          invokeArrayFns(u);
+        }
       }
     }, {
       scheduler: queueJob
