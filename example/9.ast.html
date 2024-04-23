@@ -21,9 +21,7 @@
     // 3.生成render函数（字符串拼接）
     let { baseCompile } = VueCompilerDOM;
     let ast = baseCompile(`
-    123123
-    <a href=""></a>
-    <b></b>`);
+    HELLO<div></div>{{hello}}`);
     console.log(ast);
   </script>
 </body>
